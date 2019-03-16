@@ -1,6 +1,5 @@
-#ifndef MCAL
-#define MCAL
-#include "MCAL.h"
+#ifndef MCAL_h
+#define MCAL_h
 #include "stdint.h"
 
 typedef enum {PORT_PIN_IN = 0, PORT_PIN_OUT = 1} Port_PinDirectionType;
