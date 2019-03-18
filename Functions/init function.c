@@ -66,7 +66,3 @@ void Port_Init (uint8_t  port_index)
 		GPIO_PORTF_DEN_R = 0x1F;
 	}
 }
-int main ()
-{
-return 0;
-}
