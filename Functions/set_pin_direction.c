@@ -76,7 +76,3 @@ else if(pins_direction == PORT_PIN_OUT)
 }
 	}	
 }
-int main ()
-{
-	return 0;
-}
