@@ -1,0 +1,120 @@
+#include "stdint.h"
+#include "tm4c123gh6pm.h"
+#include "MCAL.h"
+
+//void SystemInit(){}
+	
+	
+// delay milli n secounds
+void delay (int n){
+	int i, j;
+	for(i=0;i<n;i++)
+	for(j=0;j<3180;j++)
+	{}
+}
+
+
+	
+void initial() {
+
+	Port_Init(0);  //init for port A
+	Port_Init(1);  //init for port B
+	Port_Init(3);  //init for port D
+	Port_Init(4);  //init for port E
+	
+	Port_SetPinDirection (0, 0x0F, PORT_PIN_OUT);  //pin 0 1 2 set output for 1st 7 segmant [port A]
+	Port_SetPinDirection (1, 0x0F, PORT_PIN_OUT);  //pin 0 1 2 set output for 2nd 7 segmant [port B]
+	Port_SetPinDirection (3, 0x0F, PORT_PIN_OUT);  //pin 0 1 2 set output for 3rd 7 segmant [port D]
+	
+	Port_SetPinDirection (4, 0x07, PORT_PIN_IN);  //pin 0 1 2 set input for pushbuttons [port E]
+	
+	Port_SetPinPullDown (4, 0x07, 1); //attach the push buttons to PullDown Resistor [ push button up ---> 0 ]  [ push button down ---> 1 ]
+}
+	
+	int main()
+	{
+				
+		uint8_t count_1 ;
+		uint8_t count_2 ;
+		uint8_t count_3 ;
+		
+		uint8_t button_up;
+		uint8_t button_down ;
+		uint8_t reset ;
+		
+		initial();
+		
+		count_1 = 0;
+		count_2 = 0;
+		count_3 = 0;
+		
+		button_up = 0;
+		button_down = 0;
+		reset = 0;
+		
+		
+		button_up = DIO_ReadPort(4, 0x01);
+		button_down = DIO_ReadPort(4, 0x02);
+		reset = DIO_ReadPort(4, 0x04);
+		
+		while(1)
+		{
+			if (reset == 1){
+				if (reset == 0){
+					count_1 = 0;
+					count_2 = 0;
+					count_3 = 0;
+				}
+			}
+			
+			while (button_up == 1){
+				count_1++;
+				
+				if (count_1==9){
+					count_2++;
+					count_1=0;
+					
+					if (count_2==9){
+						count_3++;
+						count_2=0;
+						
+						if (count_3==9){
+						count_3=0;
+							
+						}
+					}
+				}
+			delay(200);
+			}
+			
+			if (button_down == 1){
+				count_1--;
+				
+				if (count_1==0){
+					count_2--;
+					count_1=9;
+					
+					if (count_2==0){
+						count_3--;
+						count_2=9;
+						
+						if (count_3==0){
+						count_3=0;
+							
+						}
+					}
+				}
+			}
+			
+			DIO_WritePort(0, count_1 , STD_HIGH);  //output pins for 1st 7 segmant [port A]
+			DIO_WritePort(1, count_2 , STD_HIGH);  //output pins for 2nd 7 segmant [port B]
+			DIO_WritePort(3, count_3 , STD_HIGH);  //output pins for 3rd 7 segmant [port D]
+			
+		}
+		
+		
+		
+			
+	}
+	
+
