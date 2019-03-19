@@ -73,13 +73,17 @@ pin_writer (count_1, count_2, count_3);
 			button_down = DIO_ReadPort(1, 0x20);
 			delay(20);
 			
-		
+			if (reset == 0){
+				count_1 = 0;
+				count_2 = 0;
+				count_3 = 0;
+				pin_writer (count_1, count_2, count_3);	
+				while (reset == 0){reset = DIO_ReadPort(1, 0x40);delay(20);}
+			}
+			
+			else {
 			
 			 if (button_up == 0){
-				count_1++;
-				pin_writer (count_1, count_2, count_3);
-				delay(200);
-				
 				if (count_1==9){
 					if(count_2==9) {
 						if(count_3==9) {count_1=0; count_2=0; count_3=0;}
@@ -106,8 +110,6 @@ pin_writer (count_1, count_2, count_3);
 			}
 			
 			else if (button_down == 0){
-				count_1--;
-				pin_writer (count_1, count_2, count_3);
 				
 				if (count_1==0){
 						if (count_2==0){
@@ -130,14 +132,7 @@ pin_writer (count_1, count_2, count_3);
 				}
 			while (button_down == 0){button_down = DIO_ReadPort(1, 0x20);delay(20);}
 			}
-			
-			else if (reset == 0){
-					count_1 = 0;
-					count_2 = 0;
-					count_3 = 0;
-					pin_writer (count_1, count_2, count_3);	
-				while (reset == 0){reset = DIO_ReadPort(1, 0x40);delay(20);}
-			}
+		}
 			
 		}
 		
